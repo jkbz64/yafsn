@@ -45,7 +45,7 @@ function createNavigator(options: NavigatorOptions): Navigator {
   const { screens, defaultScreen = null } = options;
 
   if (Object.keys(screens).length < 1) {
-    throw "Navigator created without screens!";
+    throw "Navigator was created without screens!";
   }
 
   const history = writable<IScreen[]>([]);
