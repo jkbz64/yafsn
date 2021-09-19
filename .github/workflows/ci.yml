@@ -2,13 +2,12 @@ name: Build package
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches: [ master, develop ]
   pull_request:
-    branches: [ $default-branch ]
+    branches: [ master ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
