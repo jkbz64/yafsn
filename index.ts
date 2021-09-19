@@ -1,10 +1,11 @@
-import { SvelteComponent } from "svelte";
-import { Writable } from "svelte/store";
+import type { SvelteComponent } from "svelte";
+import type { Writable } from "svelte/store";
 import { writable, get } from "svelte/store";
 
 type ScreenProps = Record<string, any>;
+
 export interface IScreen {
-  component?: SvelteComponent | null,
+  component?: typeof SvelteComponent | null,
   props?: ScreenProps
 }
 
@@ -22,7 +23,7 @@ export interface Navigator {
   history: Writable<IScreen[]>,
   screen: Writable<IScreen | null>,
 
-  navigate: (screens: Screens) => void,
+  navigate: (route: Route, props?: ScreenProps) => void,
   back: () => void,
 
   onBack: Writable<BackCallback>,
@@ -33,14 +34,14 @@ const defaultScreen: IScreen = {
   props: {}
 }
 
-export function makeScreen<T extends IScreen>(config: T): T {
+function makeScreen<T extends IScreen>(config: T): T {
   return {
     ...defaultScreen,
     ...config
   }
 }
 
-export function createNavigator(options: NavigatorOptions): Navigator {
+function createNavigator(options: NavigatorOptions): Navigator {
   const { screens, defaultScreen = null } = options;
 
   if (Object.keys(screens).length < 1) {
@@ -50,17 +51,20 @@ export function createNavigator(options: NavigatorOptions): Navigator {
   const history = writable<IScreen[]>([]);
   const screen = writable<IScreen | null>(defaultScreen);
 
-  function navigate(screens: Screens, route?: Route, props?: ScreenProps) {
-    if (!!route) return; // Route was not provided
+  function navigate(route?: Route, props?: ScreenProps) {
+    if (!route) return; // Route was not provided
     const _screen: IScreen = screens?.[route as Route];
 
-    const { props: screenProps = {}, ...rest } = _screen;
-    const nextScreen: IScreen = {
-      ...rest,
-      props: {
-        ...screenProps,
-        ...(!!props ? props : {})
-      }
+    if (!_screen) {
+      console.warn("Navigated to unknown screen - " + route);
+      return;
+    }
+
+    const { props: screenProps = {} } = _screen;
+    const nextScreen: IScreen = Object.assign({}, _screen);
+    nextScreen.props = {
+      ...screenProps,
+      ...(!!props ? props : {})
     };
 
     screen.set(nextScreen);
@@ -93,3 +97,5 @@ export function createNavigator(options: NavigatorOptions): Navigator {
     back,
   }
 }
+
+export { makeScreen, createNavigator };

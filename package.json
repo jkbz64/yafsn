@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "description": "Yet another svelte navigator",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index.ts"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -26,7 +28,15 @@
   },
   "homepage": "https://github.com/jkbz64/yafsn#readme",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.2.5",
+    "rollup": "^2.56.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-svelte": "^7.1.0",
     "svelte": "^3.42.6",
+    "tslib": "^2.3.1",
     "typescript": "^4.4.3"
+  },
+  "peerDependencies": {
+    "svelte": "3.x"
   }
 }
