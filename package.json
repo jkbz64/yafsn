@@ -1,0 +1,32 @@
+{
+  "name": "yafsn",
+  "version": "0.0.1",
+  "description": "Yet another svelte navigator",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkbz64/yafsn.git"
+  },
+  "keywords": [
+    "svelte",
+    "navigation"
+  ],
+  "author": "jkbz64",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jkbz64/yafsn/issues"
+  },
+  "homepage": "https://github.com/jkbz64/yafsn#readme",
+  "devDependencies": {
+    "svelte": "^3.42.6",
+    "typescript": "^4.4.3"
+  }
+}
