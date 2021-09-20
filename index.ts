@@ -5,6 +5,7 @@ import { writable, get } from "svelte/store";
 type ScreenProps = Record<string, any>;
 
 export interface IScreen {
+  [key:string]: any;
   component?: typeof SvelteComponent | null,
   props?: ScreenProps
 }
