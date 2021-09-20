@@ -10,5 +10,5 @@ export default {
         { file: pkg.module, format: "es" },
         { file: pkg.main, format: "umd", name: "yafsn" },
     ],
-    plugins: [typescript(), svelte(), resolve()],
+    plugins: [typescript({ tsconfig: "./tsconfig.json" }), svelte(), resolve()],
 };
