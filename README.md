@@ -20,6 +20,9 @@ If your answer to the questions above is __NO__, then you are in good place.
 
 ## Usage
 
+[Try it here](https://svelte.dev/repl/3f2688bad42e4263831ac7604b4f919f?version=3.44.0)
+
+
 ```svelte
 // A.svelte - first screen
 <script>
