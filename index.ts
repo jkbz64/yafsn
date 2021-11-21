@@ -35,19 +35,29 @@ const defaultScreen: IScreen = {
   props: {}
 }
 
-function makeScreen<T extends IScreen>(config: any): T {
+/**
+ * Creates screen object that is compatible with the navigator
+ * @param configOrScreen Accepts custom screen config or svelte component
+ * @returns screen
+ */
+function makeScreen<T extends IScreen>(configOrScreen: T | IScreen): T | IScreen {
   // If screen component is passed (most likely function) create IScreen out of that
   // @since 0.0.5
-  if (typeof config === "function") {
-    config = { component: config } as T;
+  if (typeof configOrScreen === "function") {
+    configOrScreen = { component: configOrScreen } as IScreen;
   }
 
   return {
     ...defaultScreen,
-    ...config
+    ...configOrScreen
   }
 }
 
+/**
+ * Creates navigator which manages the screens
+ * @param options Navigation options
+ * @returns Navigator
+ */
 function createNavigator(options: NavigatorOptions): Navigator {
   const { screens = [], defaultScreen = null } = options || {};
 
