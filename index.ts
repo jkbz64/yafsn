@@ -3,31 +3,10 @@ import type { Writable } from "svelte/store";
 import { writable, get } from "svelte/store";
 
 type ScreenProps = Record<string, any>;
-
 export interface IScreen {
   [key: string]: any;
   component?: typeof SvelteComponent | null,
   props?: ScreenProps
-}
-
-type Route = string;
-export type Screens = Record<Route, IScreen>;
-
-export type BackCallback = () => boolean;
-
-export interface NavigatorOptions {
-  screens: Screens,
-  defaultScreen?: IScreen
-}
-
-export interface Navigator {
-  history: Writable<IScreen[]>,
-  screen: Writable<IScreen | null>,
-
-  navigate: (route: Route, props?: ScreenProps) => void,
-  back: () => void,
-
-  onBack: Writable<BackCallback>,
 }
 
 const defaultScreen: IScreen = {
@@ -51,6 +30,25 @@ function makeScreen<T extends IScreen>(configOrScreen: T | IScreen): T | IScreen
     ...defaultScreen,
     ...configOrScreen
   }
+}
+
+type Route = string;
+export type Screens = Record<Route, IScreen>;
+
+export interface NavigatorOptions {
+  screens: Screens,
+  defaultScreen?: IScreen
+}
+
+export type BackCallback = () => boolean;
+export interface Navigator {
+  history: Writable<IScreen[]>,
+  screen: Writable<IScreen | null>,
+
+  navigate: (route: Route, props?: ScreenProps) => void,
+  back: () => void,
+
+  onBack: Writable<BackCallback>,
 }
 
 /**
