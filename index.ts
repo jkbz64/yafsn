@@ -37,11 +37,11 @@ export type Screens = Record<Route, IScreen>;
 
 export interface NavigatorOptions {
   screens: Screens,
-  defaultScreen?: IScreen
+  initialScreen?: Route | IScreen
 }
 
 export type BackCallback = () => boolean;
-export interface Navigator {
+export interface INavigator {
   history: Writable<IScreen[]>,
   screen: Writable<IScreen | null>,
 
@@ -54,17 +54,22 @@ export interface Navigator {
 /**
  * Creates navigator which manages the screens
  * @param options Navigation options
- * @returns Navigator
+ * @returns {INavigator}
  */
-function createNavigator(options: NavigatorOptions): Navigator {
-  const { screens = [], defaultScreen = null } = options || {};
+function createNavigator(options: NavigatorOptions): INavigator {
+  const { screens = {}, initialScreen = null } = options || {};
 
   if (Object.keys(screens).length < 1) {
     throw "Navigator was created without options or screens!";
   }
 
+  let _initialScreen: IScreen;
+  if (typeof initialScreen === "string")
+    _initialScreen = screens?.[initialScreen];
+  else _initialScreen = initialScreen;
+
   const history = writable<IScreen[]>([]);
-  const screen = writable<IScreen | null>(defaultScreen);
+  const screen = writable<IScreen | null>(_initialScreen);
 
   function navigate(route?: Route, props?: ScreenProps) {
     if (!route) return; // Route was not provided

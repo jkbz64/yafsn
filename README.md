@@ -66,7 +66,10 @@ If your answer to the questions above is **NO**, then you are in good place.
     B: makeScreen(B) // or simplified form
   }
 
-  const navigator = createNavigator({ screens });
+  const navigator = createNavigator({
+    screens,
+    initialScreen: "A" // OPTIONAL, accepts route name or result of makeScreen
+  });
   setContext("navigator", navigator);
 
   const { screen, navigate } = navigator;
