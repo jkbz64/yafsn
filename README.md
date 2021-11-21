@@ -25,35 +25,7 @@ If your answer to the questions above is **NO**, then you are in good place.
 [Try it here](https://svelte.dev/repl/3f2688bad42e4263831ac7604b4f919f?version=3.44.0)
 
 ```svelte
-// A.svelte - first screen
-<script>
-  import { getContext } from "svelte";
-  const { navigate } = getContext("navigator");
-
-  export let text = "World";
-
-  function goToB() {
-    navigate("B");
-  }
-</script>
-
-<p>Hello {text}</p>
-<button on:click={goToB}>Go to B</button>
-
-// B.svelte - second screen
-<script>
-  import { getContext } from "svelte";
-  const { navigate } = getContext("navigator");
-
-  function goToA() {
-    navigate("A", { text: "Earth" });
-  }
-</script>
-
-<p>When we go back to A, Hello World will become Hello Earth</p>
-<button on:click={goToA}>Go to A</button>
-
-// App.svelte - entrypoint
+// App.svelte
 <script>
   import { setContext } from "svelte";
   import { createNavigator, makeScreen } from "yafsn";
@@ -80,6 +52,73 @@ If your answer to the questions above is **NO**, then you are in good place.
   this={$screen?.component}
   {...$screen?.props}
 />
+```
+
+```svelte
+// A.svelte - first screen
+
+<script>
+  import { getContext } from "svelte";
+  const { navigate } = getContext("navigator");
+
+  export let text = "World";
+
+  function goToB() {
+    navigate("B");
+  }
+</script>
+
+<p>Hello {text}</p>
+<button on:click={goToB}>Go to B</button>
+```
+
+```svelte
+// B.svelte - second screen
+<script>
+  import { getContext } from "svelte";
+  const { navigate } = getContext("navigator");
+
+  function goToA() {
+    navigate("A", { text: "Earth" });
+  }
+</script>
+
+<p>When we go back to A, Hello World will become Hello Earth</p>
+<button on:click={goToA}>Go to A</button>
+```
+
+## Helper components
+
+This library exposes simple bare-bones navigator which you can tweak as much you like but if you want to just plug in the screens and call it a day there are some helper components.
+
+Before using helper components make sure to dedupe `svelte` and `yafsn` dependency!
+See:
+[rollup](https://github.com/rollup/plugins/tree/master/packages/node-resolve#dedupe),
+[vite](https://vitejs.dev/config/#resolve-dedupe)
+
+```svelte
+<script>
+  import { makeScreen } from "yafsn";
+  import Navigator from "yafsn/components/Navigator.svelte";
+
+  import A from "./A.svelte";
+  import B from "./B.svelte";
+
+  const screens = {
+    A: makeScreen({ component: A }),
+    B: makeScreen(B)
+  }
+
+  // All of the screen can access navigator with getContext("navigator")
+</script>
+
+<Navigator
+  options={{
+    screens,
+    initialScreen: "A"
+  }}
+/>
+
 ```
 
 ## License
