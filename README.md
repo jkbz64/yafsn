@@ -96,6 +96,8 @@ See:
 [rollup](https://github.com/rollup/plugins/tree/master/packages/node-resolve#dedupe),
 [vite](https://vitejs.dev/config/#resolve-dedupe)
 
+[Try it on CodeSandbox](https://codesandbox.io/s/yafsn-helper-components-p9wtd?file=/App.svelte)
+
 ```svelte
 <script>
   import { makeScreen } from "yafsn";
