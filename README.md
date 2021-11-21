@@ -6,13 +6,15 @@
 ![Svelte](https://img.shields.io/badge/svelte-3.x-yellow)
 
 ## Motivation
+
 There is a lot of navigation solutions for svelte but many of them are somewhat complicated/or they provide more features than you need with a bunch of extra steps to even begin.
+
 - Do you need "production ready" solution for navigation?
 - Do you need accessibility?
 - Do you need SSR?
 - Do you need "insert feature you won't ever use"?
 
-If your answer to the questions above is __NO__, then you are in good place.
+If your answer to the questions above is **NO**, then you are in good place.
 
 ## Installation
 
@@ -22,15 +24,14 @@ If your answer to the questions above is __NO__, then you are in good place.
 
 [Try it here](https://svelte.dev/repl/3f2688bad42e4263831ac7604b4f919f?version=3.44.0)
 
-
 ```svelte
 // A.svelte - first screen
 <script>
   import { getContext } from "svelte";
   const { navigate } = getContext("navigator");
-  
+
   export let text = "World";
-  
+
   function goToB() {
     navigate("B");
   }
@@ -43,7 +44,7 @@ If your answer to the questions above is __NO__, then you are in good place.
 <script>
   import { getContext } from "svelte";
   const { navigate } = getContext("navigator");
-  
+
   function goToA() {
     navigate("A", { text: "Earth" });
   }
@@ -52,22 +53,22 @@ If your answer to the questions above is __NO__, then you are in good place.
 <p>When we go back to A, Hello World will become Hello Earth</p>
 <button on:click={goToA}>Go to A</button>
 
-// App.svelte
+// App.svelte - entrypoint
 <script>
   import { setContext } from "svelte";
   import { createNavigator, makeScreen } from "yafsn";
-  
+
   import A from "./A.svelte";
   import B from "./B.svelte";
-  
+
   const screens = {
-    A: makeScreen({ component: A }),
-    B: makeScreen({ component: B })
+    A: makeScreen({ component: A }), // Custom screen options
+    B: makeScreen(B) // or simplified form
   }
-  
+
   const navigator = createNavigator({ screens });
   setContext("navigator", navigator);
-  
+
   const { screen, navigate } = navigator;
   navigate("A");
 </script>
@@ -79,4 +80,5 @@ If your answer to the questions above is __NO__, then you are in good place.
 ```
 
 ## License
+
 [MIT](./LICENSE)

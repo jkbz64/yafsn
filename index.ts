@@ -35,7 +35,13 @@ const defaultScreen: IScreen = {
   props: {}
 }
 
-function makeScreen<T extends IScreen>(config: T): T {
+function makeScreen<T extends IScreen>(config: any): T {
+  // If screen component is passed (most likely function) create IScreen out of that
+  // @since 0.0.5
+  if (typeof config === "function") {
+    config = { component: config } as T;
+  }
+
   return {
     ...defaultScreen,
     ...config
