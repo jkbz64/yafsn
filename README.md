@@ -98,6 +98,8 @@ See:
 
 [Try it on CodeSandbox](https://codesandbox.io/s/yafsn-helper-components-p9wtd?file=/App.svelte)
 
+## Navigator wrapper
+
 ```svelte
 <script>
   import { makeScreen } from "yafsn";
