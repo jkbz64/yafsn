@@ -5,7 +5,7 @@ import { writable, get } from "svelte/store";
 type ScreenProps = Record<string, any>;
 
 export interface IScreen {
-  [key:string]: any;
+  [key: string]: any;
   component?: typeof SvelteComponent | null,
   props?: ScreenProps
 }
@@ -43,10 +43,10 @@ function makeScreen<T extends IScreen>(config: T): T {
 }
 
 function createNavigator(options: NavigatorOptions): Navigator {
-  const { screens, defaultScreen = null } = options;
+  const { screens = [], defaultScreen = null } = options || {};
 
   if (Object.keys(screens).length < 1) {
-    throw "Navigator was created without screens!";
+    throw "Navigator was created without options or screens!";
   }
 
   const history = writable<IScreen[]>([]);
