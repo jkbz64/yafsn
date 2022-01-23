@@ -68,7 +68,7 @@ function createNavigator(options: NavigatorOptions): INavigator {
     _initialScreen = screens?.[initialScreen];
   else _initialScreen = initialScreen;
 
-  const history = writable<IScreen[]>([]);
+  const history = writable<IScreen[]>(_initialScreen ? [_initialScreen] : []);
   const screen = writable<IScreen | null>(_initialScreen);
 
   function navigate(route?: Route, props?: ScreenProps) {
