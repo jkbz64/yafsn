@@ -5,21 +5,23 @@ import { writable, get } from "svelte/store";
 type ScreenProps = Record<string, any>;
 export interface IScreen {
   [key: string]: any;
-  component?: typeof SvelteComponent | null,
-  props?: ScreenProps
+  component?: typeof SvelteComponent | null;
+  props?: ScreenProps;
 }
 
 const defaultScreen: IScreen = {
   component: null,
-  props: {}
-}
+  props: {},
+};
 
 /**
  * Creates screen object that is compatible with the navigator
  * @param configOrScreen Accepts custom screen config or svelte component
  * @returns screen
  */
-function makeScreen<T extends IScreen>(configOrScreen: T | IScreen): T | IScreen {
+function makeScreen<T extends IScreen>(
+  configOrScreen: T | IScreen
+): T | IScreen {
   // If screen component is passed (most likely function) create IScreen out of that
   // @since 0.0.5
   if (typeof configOrScreen === "function") {
@@ -28,27 +30,28 @@ function makeScreen<T extends IScreen>(configOrScreen: T | IScreen): T | IScreen
 
   return {
     ...defaultScreen,
-    ...configOrScreen
-  }
+    ...configOrScreen,
+  };
 }
 
 type Route = string;
 export type Screens = Record<Route, IScreen>;
 
 export interface NavigatorOptions {
-  screens: Screens,
-  initialScreen?: Route | IScreen
+  screens: Screens;
+  initialScreen?: Route | IScreen;
 }
 
 export type BackCallback = () => boolean;
 export interface INavigator {
-  history: Writable<IScreen[]>,
-  screen: Writable<IScreen | null>,
+  history: Writable<IScreen[]>;
+  screen: Writable<IScreen | null>;
 
-  navigate: (route: Route, props?: ScreenProps) => void,
-  back: () => void,
+  navigate: (route: Route, props?: ScreenProps) => void;
+  back: () => void;
 
-  onBack: Writable<BackCallback>,
+  onNavigate: Writable<() => void>;
+  onBack: Writable<BackCallback>;
 }
 
 /**
@@ -71,6 +74,7 @@ function createNavigator(options: NavigatorOptions): INavigator {
   const history = writable<IScreen[]>(_initialScreen ? [_initialScreen] : []);
   const screen = writable<IScreen | null>(_initialScreen);
 
+  const onNavigate = writable<() => void>(() => {});
   function navigate(route?: Route, props?: ScreenProps) {
     if (!route) return; // Route was not provided
     const _screen: IScreen = screens?.[route as Route];
@@ -84,19 +88,22 @@ function createNavigator(options: NavigatorOptions): INavigator {
     const nextScreen: IScreen = Object.assign({}, _screen);
     nextScreen.props = {
       ...screenProps,
-      ...(!!props ? props : {})
+      ...(!!props ? props : {}),
     };
 
     screen.set(nextScreen);
-    history.update(history => [...history, nextScreen]);
+    history.update((history) => [...history, nextScreen]);
+
+    const $onNavigate = get(onNavigate);
+    $onNavigate?.();
   }
 
   const onBack = writable<BackCallback>(() => true);
   function back() {
     if (get(history).length < 2) return;
 
-    const callback = get(onBack);
-    if (!callback()) return;
+    const $onBack = get(onBack);
+    if (!$onBack()) return;
 
     onBack.set(() => true);
 
@@ -104,18 +111,19 @@ function createNavigator(options: NavigatorOptions): INavigator {
     const lastScreen = get(history).pop() as IScreen;
 
     screen.set(lastScreen);
-    history.update(history => [...history, lastScreen]);
+    history.update((history) => [...history, lastScreen]);
   }
 
   return {
     history,
     screen,
 
+    onNavigate,
     onBack,
 
     navigate,
     back,
-  }
+  };
 }
 
 export { makeScreen, createNavigator };
