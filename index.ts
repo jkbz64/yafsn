@@ -75,6 +75,8 @@ function createNavigator(options: NavigatorOptions): INavigator {
   const screen = writable<IScreen | null>(_initialScreen);
 
   const onNavigate = writable<() => void>(() => {});
+  const onBack = writable<BackCallback>(() => true);
+
   function navigate(route?: Route, props?: ScreenProps) {
     if (!route) return; // Route was not provided
     const _screen: IScreen = screens?.[route as Route];
@@ -91,6 +93,7 @@ function createNavigator(options: NavigatorOptions): INavigator {
       ...(!!props ? props : {}),
     };
 
+    onBack.set(() => true);
     screen.set(nextScreen);
     history.update((history) => [...history, nextScreen]);
 
@@ -98,7 +101,6 @@ function createNavigator(options: NavigatorOptions): INavigator {
     $onNavigate?.();
   }
 
-  const onBack = writable<BackCallback>(() => true);
   function back() {
     if (get(history).length < 2) return;
 
