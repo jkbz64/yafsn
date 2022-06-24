@@ -101,7 +101,7 @@ function createNavigator(options: NavigatorOptions): INavigator {
     $onNavigate?.();
   }
 
-  function back() {
+  function back(props?: ScreenProps) {
     if (get(history).length < 2) return;
 
     const $onBack = get(onBack);
@@ -110,7 +110,12 @@ function createNavigator(options: NavigatorOptions): INavigator {
     onBack.set(() => true);
 
     get(history).pop();
+
     const lastScreen = get(history).pop() as IScreen;
+    lastScreen.props = {
+      ...(lastScreen?.props || {}),
+      ...(!!props ? props : {}),
+    };
 
     screen.set(lastScreen);
     history.update((history) => [...history, lastScreen]);
