@@ -1,6 +1,5 @@
 # /yafsn/ - yet another svelte navigator
 
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/jkbz64/yafsn/Build%20package/master)
 ![npm](https://img.shields.io/npm/v/yafsn)
 ![NPM](https://img.shields.io/npm/l/yafsn)
 ![Svelte](https://img.shields.io/badge/svelte-3.x-yellow)
