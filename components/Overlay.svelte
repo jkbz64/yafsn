@@ -30,7 +30,7 @@
 <slot />
 
 {#if visible}
-  <article on:click={closable ? closeOverlay : null}>
+  <article on:click|self={closable ? closeOverlay : null}>
     <div>
       <svelte:component this={component} />
     </div>
